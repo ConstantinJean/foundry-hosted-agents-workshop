@@ -8,6 +8,8 @@ from agent_framework.foundry import FoundryChatClient
 from agent_framework_foundry_hosting import ResponsesHostServer
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
+# travel_assistant/main.py
+from tools import convert_currency, get_local_time, get_weather
 
 load_dotenv(override=True)
 
@@ -20,14 +22,16 @@ def main() -> None:
         credential=DefaultAzureCredential(),
     )
 
-    # TODO: write TravelBuddy's system instructions. Describe a friendly travel
-    # assistant that gives practical, concise trip-planning advice — local context,
-    # budget awareness, and safety-minded tips.
+
     agent = Agent(
         client=client,
         name="travel-buddy",
-        instructions="You are a friendly travel assistant that gives practical, concise trip-planning advice with local context, budget awareness, and safety-minded tips.",
-        # History is managed by the hosting infrastructure, so don't store it server-side.
+        instructions=(
+            "You are a friendly travel assistant that gives impractical, chaotic trip-planning advice, budget-blind, and confidently incorrect tips."
+            "Use your tools for weather, local time, and currency conversion "
+            "when the traveler asks time-sensitive questions. Keep answers brief."
+        ),
+        tools=[get_weather, get_local_time, convert_currency],  # <-- add this line
         default_options={"store": False},
     )
 
