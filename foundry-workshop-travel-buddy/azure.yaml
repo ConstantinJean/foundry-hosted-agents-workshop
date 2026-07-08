@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: foundry-workshop-travel-buddy
+services:
+    foundry-workshop-travel-buddy:
+        project: src/foundry-workshop-travel-buddy
+        host: azure.ai.agent
+        language: python
+        uses:
+            - proj-default
+        codeConfiguration:
+            dependencyResolution: remote_build
+            entryPoint: main.py
+            runtime: python_3_13
+        container:
+            resources:
+                cpu: "0.5"
+                memory: 1Gi
+        description: |
+            A basic Agent Framework travel assistant hosted by Foundry.
+        environmentVariables:
+            - name: AZURE_AI_PROJECT_ENDPOINT
+              value: ${AZURE_AI_PROJECT_ENDPOINT}
+            - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+              value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+            - name: WORKSHOP_RESOURCE_PREFIX
+              value: ${WORKSHOP_RESOURCE_PREFIX}
+        kind: hosted
+        metadata:
+            tags:
+                - Agent Framework
+                - AI Agent Hosting
+                - Azure AI AgentServer
+                - Responses Protocol
+                - Travel Assistant
+        name: foundry-workshop-travel-buddy
+        protocols:
+            - protocol: responses
+              version: 2.0.0
+    proj-default:
+        project: ""
+        host: azure.ai.project
+        language: ""
+        endpoint: https://foundry-workshop-muac-cjean.services.ai.azure.com/api/projects/proj-default
+infra:
+    provider: microsoft.foundry
