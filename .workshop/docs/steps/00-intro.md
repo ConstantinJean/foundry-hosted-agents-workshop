@@ -247,7 +247,7 @@ This workshop has one important contract: **`README.md` is the current step**. E
 
 Make sure `python .workshop/scripts/preflight.py` is green (or `uv run python .workshop/scripts/preflight.py` if you're using `uv` without activation), then click the button below to open the workflow — and click **Run workflow** in the dialog that appears:
 
-[![▶ Start the workshop](https://img.shields.io/badge/%E2%96%B6_Start_the_workshop-Step_01-2ea44f?style=for-the-badge)](https://github.com/{{OWNER}}/{{REPO}}/actions/workflows/start-workshop.yml)
+[![▶ Start the workshop](https://img.shields.io/badge/%E2%96%B6_Start_the_workshop-Step_01-2ea44f?style=for-the-badge)](https://github.com/ConstantinJean/foundry-hosted-agents-workshop/actions/workflows/start-workshop.yml)
 
 Click **Run workflow** to move from Setup to Step 1. Pull after the action completes. From Step 1 onward you advance by committing your work and pushing to `main` — there is no button. With setup already done, Step 1 jumps straight into authoring `agent.yaml`, `agent.manifest.yaml`, and `main.py` for your first hosted TravelBuddy agent.
 
