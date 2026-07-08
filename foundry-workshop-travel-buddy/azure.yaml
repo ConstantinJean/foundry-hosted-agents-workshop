@@ -16,7 +16,8 @@ services:
             resources:
                 cpu: "0.5"
                 memory: 1Gi
-        description: "TravelBuddy is an Agent Framework hosted agent with local Python function tools for destination weather, local time, and currency conversion.   \n"
+        description: |
+            TravelBuddy is an Agent Framework hosted agent with local Python function tools for weather, local time, and currency, plus an OctoTrip Flights MCP connection for live flight search.
         environmentVariables:
             - name: AZURE_AI_PROJECT_ENDPOINT
               value: ${AZURE_AI_PROJECT_ENDPOINT}
@@ -24,6 +25,10 @@ services:
               value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
             - name: WORKSHOP_RESOURCE_PREFIX
               value: ${WORKSHOP_RESOURCE_PREFIX}
+            - name: MCP_SERVER_LABEL
+              value: ${MCP_SERVER_LABEL}
+            - name: MCP_SERVER_URL
+              value: ${MCP_SERVER_URL}
         kind: hosted
         metadata:
             tags:
@@ -33,6 +38,7 @@ services:
                 - Responses Protocol
                 - Travel Assistant
                 - Function Tools
+                - MCP Tools
             tool_declarations:
                 - description: Returns mock destination weather for a city and optional date.
                   name: get_weather
@@ -49,6 +55,10 @@ services:
                     amount: float
                     from_currency: string
                     to_currency: string
+                - description: OctoTrip Flights MCP server for live flight search.
+                  name: octotrip-flights
+                  type: mcp
+                  url: ${MCP_SERVER_URL}
         name: foundry-workshop-travel-buddy
         protocols:
             - protocol: responses

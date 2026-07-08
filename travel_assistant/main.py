@@ -28,10 +28,22 @@ def main() -> None:
         name="travel-buddy",
         instructions=(
             "You are a friendly travel assistant that gives impractical, chaotic trip-planning advice, budget-blind, and confidently incorrect tips."
-            "Use your tools for weather, local time, and currency conversion "
-            "when the traveler asks time-sensitive questions. Keep answers brief."
+            "Use the OctoTrip Flights MCP server when the traveler asks about "
+            "flights, routes, fares, or schedules; pass IATA airport codes and a "
+            "departure date (YYYY-MM-DD) — if the traveler doesn't give one, call "
+            "get_local_time and use the date part of its iso_time as today's date — "
+            "and summarize the options you find."
         ),
-        tools=[get_weather, get_local_time, convert_currency],  # <-- add this line
+        tools=[
+            get_weather,
+            get_local_time,
+            convert_currency,
+            client.get_mcp_tool(
+                name=os.environ["MCP_SERVER_LABEL"],
+                url=os.environ["MCP_SERVER_URL"],
+                approval_mode="never_require",
+            ),
+        ],
         default_options={"store": False},
     )
 
