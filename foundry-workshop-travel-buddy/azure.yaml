@@ -17,7 +17,7 @@ services:
                 cpu: "0.5"
                 memory: 1Gi
         description: |
-            TravelBuddy is an Agent Framework hosted agent with local Python function tools for weather, local time, and currency, plus a Foundry Toolbox that bundles web search, Code Interpreter, and the OctoTrip flights MCP server behind one project-managed endpoint.
+            TravelBuddy is an Agent Framework hosted agent with local Python function tools for weather, local time, and currency, plus a Foundry Toolbox that bundles web search, Code Interpreter, and the OctoTrip flights MCP server behind one project-managed endpoint, and RAG grounding over a curated destinations index in Azure AI Search.
         environmentVariables:
             - name: AZURE_AI_PROJECT_ENDPOINT
               value: ${AZURE_AI_PROJECT_ENDPOINT}
@@ -27,6 +27,10 @@ services:
               value: ${WORKSHOP_RESOURCE_PREFIX}
             - name: TOOLBOX_ENDPOINT
               value: ${TOOLBOX_ENDPOINT}
+            - name: AZURE_AI_SEARCH_ENDPOINT
+              value: ${AZURE_AI_SEARCH_ENDPOINT}
+            - name: AZURE_AI_SEARCH_INDEX_NAME
+              value: ${AZURE_AI_SEARCH_INDEX_NAME}
         kind: hosted
         metadata:
             tags:
@@ -38,6 +42,7 @@ services:
                 - Function Tools
                 - MCP Tools
                 - Toolbox Tools
+                - RAG
             tool_declarations:
                 - description: Returns mock destination weather for a city and optional date.
                   name: get_weather
@@ -59,6 +64,11 @@ services:
                   endpoint: ${TOOLBOX_ENDPOINT}
                   name: travel-toolbox
                   type: toolbox
+                - description: |
+                    Azure AI Search retrieval over the curated destinations index; injects the top-k matching destination records into context before each turn.
+                  endpoint: ${AZURE_AI_SEARCH_ENDPOINT}
+                  name: travelbuddy_destinations
+                  type: azure_ai_search
         name: foundry-workshop-travel-buddy
         protocols:
             - protocol: responses

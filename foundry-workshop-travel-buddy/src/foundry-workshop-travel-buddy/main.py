@@ -4,9 +4,11 @@
 import os
 
 from agent_framework import Agent
+from agent_framework.azure import AzureAISearchContextProvider
 from agent_framework.foundry import FoundryChatClient
 from agent_framework_foundry_hosting import FoundryToolbox, ResponsesHostServer
 from azure.identity import DefaultAzureCredential
+
 from dotenv import load_dotenv
 # travel_assistant/main.py
 from tools import convert_currency, get_local_time, get_weather
@@ -27,6 +29,19 @@ def main() -> None:
 
     toolbox = FoundryToolbox(credential)
 
+    search_endpoint = os.environ["AZURE_AI_SEARCH_ENDPOINT"]       # NEW
+    search_index_name = os.environ["AZURE_AI_SEARCH_INDEX_NAME"]   # NEW
+    context_providers = [                                          # NEW
+        AzureAISearchContextProvider(
+            source_id="travelbuddy_destinations",
+            endpoint=search_endpoint,
+            index_name=search_index_name,
+            credential=credential,
+            mode="semantic",
+            top_k=3,
+        )
+    ]
+
     agent = Agent(
         client=client,
         name="travel-buddy",
@@ -44,6 +59,7 @@ def main() -> None:
             convert_currency,
             toolbox,
         ],
+        context_providers=context_providers,
         default_options={"store": False},
     )
 
